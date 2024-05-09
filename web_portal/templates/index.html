@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Sender</title>
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body {
+    padding: 20px;
+  }
+  .form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .form-container h2 {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Add Sender</h2>
+      <form id="addSenderForm">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="compartment_id">Compartment ID:</label>
+          <input type="text" class="form-control" id="compartment_id" name="compartment_id">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="addSender()">Add User</button>
+      </form>
+      <div id="response" class="mt-3"></div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery (optional) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  function addSender() {
+    var email = document.getElementById("email").value;
+    var compartmentId = document.getElementById("compartment_id").value;
+
+    var jsonData = {
+      "email": email,
+      "compartment_id": compartmentId
+    };
+
+    fetch('https://k3kei6qjeywvrxanqdnd7kkisq.apigateway.eu-zurich-1.oci.customer-oci.com/v1/addsender', {
+      method: 'PUT',
+      body: JSON.stringify(jsonData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      // Print the status code
+      document.getElementById("response").innerHTML = "Status: " + response.status ;
+   
+      document.getElementById("email").value = "";
+      document.getElementById("compartment_id").value = "";
+	setTimeout(function() {
+        document.getElementById("response").innerHTML = "";
+      }, 5000); 
+
+ })
+    .catch(error => {
+      // Print any errors
+      console.error('Error:', error);
+      document.getElementById("response").innerHTML = "Error: " + error.message;
+    });
+  }
+</script>
+</body>
+</html>
+
